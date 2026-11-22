@@ -63,7 +63,7 @@ public class HudEditorScreen extends Screen {
 
         for (Widget widget : widgets) {
             if (widget.isEnabled()) {
-                drawWidget(g, f, widget, mx, my);
+                drawWidget(g, f, widget, mx, my, delta);
             }
         }
 
@@ -82,9 +82,9 @@ public class HudEditorScreen extends Screen {
         }
     }
 
-    private void drawWidget(GuiGraphicsExtractor g, Font f, Widget widget, int mx, int my) {
-        int x = widget.getAbsoluteX(mc.getWindow().getGuiScaledWidth());
-        int y = widget.getAbsoluteY(mc.getWindow().getGuiScaledHeight(), f);
+    private void drawWidget(GuiGraphicsExtractor g, Font f, Widget widget, int mx, int my, float delta) {
+        int x = widget.getAbsoluteX(Minecraft.getInstance().getWindow().getGuiScaledWidth());
+        int y = widget.getAbsoluteY(Minecraft.getInstance().getWindow().getGuiScaledHeight(), f);
         int w = widget.getRenderWidth(f);
         int h = widget.getRenderHeight(f);
 
