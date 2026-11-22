@@ -6,10 +6,11 @@ import com.lowspec.client.hud.widget.Widget;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
-import net.minecraft.core.NonNullList;
-import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+
+import java.util.stream.Stream;
 
 public class TotemWidget extends Widget {
     public TotemWidget() {
@@ -56,21 +57,22 @@ public class TotemWidget extends Widget {
 
         int count = 0;
 
-        NonNullList<ItemStack> inventory = mc.player.getInventory().getNonExposedStorage();
-        for (ItemStack stack : inventory) {
+        var inventory = mc.player.getInventory();
+        for (int i = 0; i < inventory.getContainerSize(); i++) {
+            ItemStack stack = inventory.getItem(i);
             if (stack.is(Items.TOTEM_OF_UNDYING)) {
                 count += stack.getCount();
             }
         }
 
-        for (EquipmentSlot slot : EquipmentSlot.ARMOR) {
+        for (var slot : net.minecraft.world.entity.EquipmentSlot.ARMOR) {
             ItemStack stack = mc.player.getItemBySlot(slot);
             if (stack.is(Items.TOTEM_OF_UNDYING)) {
                 count += stack.getCount();
             }
         }
 
-        ItemStack offhand = mc.player.getItemBySlot(EquipmentSlot.OFFHAND);
+        ItemStack offhand = mc.player.getItemBySlot(net.minecraft.world.entity.EquipmentSlot.OFFHAND);
         if (offhand.is(Items.TOTEM_OF_UNDYING)) {
             count += offhand.getCount();
         }

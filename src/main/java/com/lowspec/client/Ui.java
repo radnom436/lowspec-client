@@ -27,7 +27,7 @@ public class Ui {
     }
 
     public static void text(GuiGraphicsExtractor g, Font f, String s, int x, int y, int color, boolean shadow) {
-        g.drawString(f, t(s), x, y, color, shadow);
+        g.text(f, t(s), x, y, color, shadow);
     }
 
     public static int a(int c, float m) {
