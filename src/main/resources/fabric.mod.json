@@ -3,7 +3,7 @@
   "id": "lowspec",
   "version": "${version}",
   "name": "LowSpec Client",
-  "description": "Lightweight HUD and modules for low-end PCs, designed for weak hardware optimization.",
+  "description": "Lightweight HUD and modules for low-end PCs.",
   "authors": ["You"],
   "license": "MIT",
   "environment": "client",
@@ -18,13 +18,5 @@
     "minecraft": ">=26.2",
     "java": ">=25",
     "fabric-api": "*"
-  },
-  "suggests": {
-    "modmenu": "*",
-    "sodium": "*",
-    "lithium": "*",
-    "ferritecore": "*",
-    "entityculling": "*",
-    "immediatelyfast": "*"
   }
 }
