@@ -29,7 +29,7 @@ public class DayTimeWidget extends Widget {
         Minecraft mc = Minecraft.getInstance();
         if (mc.player == null || mc.level == null) return;
 
-        long time = mc.level.getDayTime();
+        long time = mc.level.getGameTime();
         int day = (int)(time / 24000) + 1;
         int timeOfDay = (int)(time % 24000);
         int hour = (timeOfDay / 1000 + 6) % 24;

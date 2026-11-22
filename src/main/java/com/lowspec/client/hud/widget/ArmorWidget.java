@@ -94,7 +94,9 @@ public class ArmorWidget extends Widget {
         for (EquipmentSlot slot : slots) {
             ItemStack stack = mc.player.getItemBySlot(slot);
             if (!stack.isEmpty()) {
-                g.renderItem(stack, ax, ay);
+                // Draw simple box for item slot
+                g.fill(ax, ay, ax + 16, ay + 16, 0x70101820);
+                String name = stack.getHoverName().getString();
                 if (stack.isDamageableItem()) {
                     int pct = getDurabilityPercent(stack);
                     String text = pct + "%";
@@ -120,7 +122,7 @@ public class ArmorWidget extends Widget {
             ItemStack stack = mc.player.getItemBySlot(slots[i]);
             int x = x0 + i * 28 + 6;
             if (!stack.isEmpty()) {
-                g.renderItem(stack, x, y0);
+                g.fill(x, y0, x + 16, y0 + 16, 0x70101820);
                 if (stack.isDamageableItem()) {
                     int pct = getDurabilityPercent(stack);
                     String text = pct + "%";
@@ -145,7 +147,7 @@ public class ArmorWidget extends Widget {
             ItemStack stack = mc.player.getItemBySlot(slots[i]);
             int x = x0 + i * slotW + (slotW - 16) / 2;
             if (!stack.isEmpty()) {
-                g.renderItem(stack, x, y0);
+                g.fill(x, y0, x + 16, y0 + 16, 0x70101820);
                 if (stack.isDamageableItem()) {
                     int pct = getDurabilityPercent(stack);
                     String text = pct + "%";
@@ -170,7 +172,7 @@ public class ArmorWidget extends Widget {
             ItemStack stack = mc.player.getItemBySlot(slots[i]);
             int x = x0 + i * slotW + (slotW - 16) / 2;
             if (!stack.isEmpty()) {
-                g.renderItem(stack, x, y0);
+                g.fill(x, y0, x + 16, y0 + 16, 0x70101820);
                 if (stack.isDamageableItem()) {
                     int pct = getDurabilityPercent(stack);
                     String text = pct + "%";

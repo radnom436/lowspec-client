@@ -50,7 +50,7 @@ public class HudEditorScreen extends Screen {
     }
 
     @Override
-    public void extractRenderState(GuiGraphicsExtractor g, int mx, int my, float delta) {
+    public void render(GuiGraphicsExtractor g, int mx, int my, float delta) {
         Minecraft mc = Minecraft.getInstance();
         Font f = mc.font;
         int W = mc.getWindow().getGuiScaledWidth();
@@ -146,6 +146,7 @@ public class HudEditorScreen extends Screen {
         int mx = (int)mouseX;
         int my = (int)mouseY;
 
+        Minecraft mc = Minecraft.getInstance();
         int barW = 300;
         int barX = (mc.getWindow().getGuiScaledWidth() - barW) / 2;
         int closeX = barX + barW - 80;

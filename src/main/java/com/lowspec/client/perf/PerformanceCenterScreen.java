@@ -43,7 +43,6 @@ public class PerformanceCenterScreen extends Screen {
         int px = (this.width - pw) / 2;
         int py = (this.height - ph) / 2;
 
-        // Preset buttons
         Button lowBtn = Button.builder(Component.literal("Low Preset"), b -> applyPreset(Preset.LOW))
                 .bounds(px + 20, py + 40, 120, 20).build();
         this.addRenderableWidget(lowBtn);
@@ -56,12 +55,10 @@ public class PerformanceCenterScreen extends Screen {
                 .bounds(px + 20, py + 70, 260, 20).build();
         this.addRenderableWidget(qualBtn);
 
-        // Restore button
         Button restoreBtn = Button.builder(Component.literal("Restore Previous"), b -> restorePrevious())
                 .bounds(px + 20, py + 100, 260, 20).build();
         this.addRenderableWidget(restoreBtn);
 
-        // Close button
         Button closeBtn = Button.builder(Component.literal("Close"), b -> this.onClose())
                 .bounds(px + 20, py + 130, 260, 20).build();
         this.addRenderableWidget(closeBtn);
@@ -97,7 +94,6 @@ public class PerformanceCenterScreen extends Screen {
 
     private void restorePrevious() {
         Minecraft mc = Minecraft.getInstance();
-        // Restore from saved preferences
         mc.options.renderDistance().set(12);
         mc.options.simulationDistance().set(12);
         mc.options.biomeBlendRadius().set(2);
@@ -111,20 +107,16 @@ public class PerformanceCenterScreen extends Screen {
         Minecraft mc = Minecraft.getInstance();
         Font f = mc.font;
 
-        // Darken background
         g.fill(0, 0, this.width, this.height, 0x80000000);
 
-        // Panel
         int pw = 300;
         int ph = 200;
         int px = (this.width - pw) / 2;
         int py = (this.height - ph) / 2;
         Ui.panel(g, px, py, pw, ph);
 
-        // Title
         Ui.text(g, f, "Performance Center", px + 20, py + 10, 0xFFFFFFFF, false);
 
-        // Hardware detection (simplified)
         String hwInfo = String.format("Render Distance: %d", mc.options.renderDistance().get());
         Ui.text(g, f, hwInfo, px + 20, py + 35, 0xFFAAAAAA, false);
 
