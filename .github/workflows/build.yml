@@ -1,6 +1,9 @@
 name: build
 on:
   push:
+    tags:
+      - 'v*'
+  pull_request:
   workflow_dispatch:
 
 jobs:
@@ -8,15 +11,33 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Download font
-        run: |
-          mkdir -p src/main/resources/assets/lowspec/font
-          curl -fsSL -o src/main/resources/assets/lowspec/font/poppins.ttf \
-            https://raw.githubusercontent.com/google/fonts/main/ofl/poppins/Poppins-Medium.ttf
+
+      - name: Cache build directory
+        uses: actions/cache@v4
+        with:
+          path: |
+            build
+          key: ${{ runner.os }}-build-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-build-
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 25
+
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: 9.5.1
+
+      - run: ./gradlew build --no-daemon --release 25
+
+      # Generate logo if not present
       - name: Generate logo texture
         run: |
+          mkdir -p src/main/resources/assets/lowspec/textures/font
           python3 - <<'PY'
-          import zlib, struct, os
+          import zlib, struct, os, json
           S = 4
           W = H = 12 * S
           rim = [(2,10),(1,11)] + [(0,12)]*8 + [(1,11),(2,10)]
@@ -46,18 +67,29 @@ jobs:
               c = struct.pack('>I', len(d)) + t + d
               return c + struct.pack('>I', zlib.crc32(t+d) & 0xffffffff)
           png = b'\x89PNG\r\n\x1a\n' + chunk(b'IHDR', struct.pack('>IIBBBBB', W, H, 8, 6, 0, 0, 0)) + chunk(b'IDAT', zlib.compress(raw, 9)) + chunk(b'IEND', b'')
-          os.makedirs('src/main/resources/assets/lowspec/textures/font', exist_ok=True)
           open('src/main/resources/assets/lowspec/textures/font/logo.png','wb').write(png)
           PY
-      - uses: actions/setup-java@v4
-        with:
-          distribution: temurin
-          java-version: 25
-      - uses: gradle/actions/setup-gradle@v4
-        with:
-          gradle-version: 9.5.1
-      - run: gradle build --no-daemon
+
+      - name: Download Poppins font
+        run: |
+          mkdir -p src/main/resources/assets/lowspec/font
+          curl -fsSL -o src/main/resources/assets/lowspec/font/poppins.ttf \
+            https://raw.githubusercontent.com/google/fonts/main/ofl/poppins/Poppins-Medium.ttf
+
+      - name: Build with Gradle
+        run: ./gradlew build --no-daemon --release
+
       - uses: actions/upload-artifact@v4
         with:
           name: lowspec-client-jar
           path: build/libs/*.jar
+
+      - name: Publish to Modrinth
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: modrinth/modrinth-action@v1
+        with:
+          id: ${{ secrets.MODRINTH_ID }}
+          version: ${{ github.ref_name }}
+          github: ${{ github.repository }}
+          changelog: ${{ github.event.head_commit.message }}
+          access-token: ${{ secrets.MODRINTH_TOKEN }}
