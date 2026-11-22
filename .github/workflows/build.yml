@@ -30,9 +30,6 @@ jobs:
         with:
           gradle-version: 9.5.1
 
-      - run: ./gradlew build --no-daemon --release 25
-
-      # Generate logo if not present
       - name: Generate logo texture
         run: |
           mkdir -p src/main/resources/assets/lowspec/textures/font
@@ -84,12 +81,9 @@ jobs:
           name: lowspec-client-jar
           path: build/libs/*.jar
 
-      - name: Publish to Modrinth
+      - name: Create Release
         if: startsWith(github.ref, 'refs/tags/')
-        uses: modrinth/modrinth-action@v1
+        uses: softprops/action-gh-release@v1
         with:
-          id: ${{ secrets.MODRINTH_ID }}
-          version: ${{ github.ref_name }}
-          github: ${{ github.repository }}
-          changelog: ${{ github.event.head_commit.message }}
-          access-token: ${{ secrets.MODRINTH_TOKEN }}
+          files: build/libs/*.jar
+          generate_release_notes: true
