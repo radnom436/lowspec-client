@@ -1,0 +1,63 @@
+name: build
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download font
+        run: |
+          mkdir -p src/main/resources/assets/lowspec/font
+          curl -fsSL -o src/main/resources/assets/lowspec/font/poppins.ttf \
+            https://raw.githubusercontent.com/google/fonts/main/ofl/poppins/Poppins-Medium.ttf
+      - name: Generate logo texture
+        run: |
+          python3 - <<'PY'
+          import zlib, struct, os
+          S = 4
+          W = H = 12 * S
+          rim = [(2,10),(1,11)] + [(0,12)]*8 + [(1,11),(2,10)]
+          inner = {1:(3,9),2:(2,10),9:(2,10),10:(3,9)}
+          px = [[(0,0,0,0)]*W for _ in range(H)]
+          def fill(x0,y0,x1,y1,c):
+              for y in range(y0*S, y1*S):
+                  for x in range(x0*S, x1*S):
+                      px[y][x] = c
+          def lerp(a,b,t):
+              return tuple(int(a[i]+(b[i]-a[i])*t) for i in range(3))
+          for r,(a,b) in enumerate(rim):
+              fill(a,r,b,r+1,(223,251,255,230))
+          for r in range(1,11):
+              a,b = inner.get(r,(1,11))
+              c = lerp((122,92,255),(61,224,192),(r-1)/9)
+              fill(a,r,b,r+1,c+(255,))
+          for y in range(2*S, 3*S+S//2):
+              for x in range(3*S, 8*S):
+                  r,g,b,a = px[y][x]
+                  px[y][x] = (r+(255-r)*85//255, g+(255-g)*85//255, b+(255-b)*85//255, a)
+          fill(4,3,6,9,(255,255,255,255))
+          fill(4,7,9,9,(255,255,255,255))
+          fill(8,3,10,5,(255,240,122,255))
+          raw = b''.join(b'\x00' + bytes(v for p in row for v in p) for row in px)
+          def chunk(t,d):
+              c = struct.pack('>I', len(d)) + t + d
+              return c + struct.pack('>I', zlib.crc32(t+d) & 0xffffffff)
+          png = b'\x89PNG\r\n\x1a\n' + chunk(b'IHDR', struct.pack('>IIBBBBB', W, H, 8, 6, 0, 0, 0)) + chunk(b'IDAT', zlib.compress(raw, 9)) + chunk(b'IEND', b'')
+          os.makedirs('src/main/resources/assets/lowspec/textures/font', exist_ok=True)
+          open('src/main/resources/assets/lowspec/textures/font/logo.png','wb').write(png)
+          PY
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 25
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: 9.5.1
+      - run: gradle build --no-daemon
+      - uses: actions/upload-artifact@v4
+        with:
+          name: lowspec-client-jar
+          path: build/libs/*.jar

@@ -1,0 +1,13 @@
+{
+  "required": false,
+  "minVersion": "0.8",
+  "package": "com.lowspec.client.mixin",
+  "compatibilityLevel": "JAVA_25",
+  "client": [
+    "ShowSelfNameMixin",
+    "NameTagLogoMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 0
+  }
+}
