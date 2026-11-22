@@ -5,7 +5,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.DeltaTracker;
-import net.minecraft.client.gui.components.RenderLayers;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,19 +40,18 @@ public class HudManager {
         Minecraft mc = Minecraft.getInstance();
         if (mc.player == null) return;
 
-        // Render active HUD widgets based on config
         int y = 6;
         int x = 6;
 
         if (LowSpecClient.isEnabled("fps")) {
             String fpsText = getFpsText();
-            g.drawString(mc.font, fpsText, x, y, 0xFFFFFFFF);
+            g.text(mc.font, fpsText, x, y, 0xFFFFFFFF, false);
             y += 16;
         }
 
         if (LowSpecClient.isEnabled("cps")) {
             String cpsText = getCpsText();
-            g.drawString(mc.font, cpsText, x, y, 0xFFFFFFFF);
+            g.text(mc.font, cpsText, x, y, 0xFFFFFFFF, false);
             y += 16;
         }
 
@@ -62,7 +60,7 @@ public class HudManager {
                     (int)Math.floor(mc.player.getX()),
                     (int)Math.floor(mc.player.getY()),
                     (int)Math.floor(mc.player.getZ()));
-            g.drawString(mc.font, coordsText, x, y, 0xFFFFFFFF);
+            g.text(mc.font, coordsText, x, y, 0xFFFFFFFF, false);
             y += 16;
         }
 
@@ -71,10 +69,8 @@ public class HudManager {
             int used = (int)((rt.totalMemory() - rt.freeMemory()) >> 20);
             int max = (int)(rt.maxMemory() >> 20);
             String memText = String.format("MEM  %d / %d MB", used, max);
-            g.drawString(mc.font, memText, x, y, 0xFFFFFFFF);
+            g.text(mc.font, memText, x, y, 0xFFFFFFFF, false);
         }
-
-        // Add more HUD renders as implemented
     }
 
     private String getFpsText() {

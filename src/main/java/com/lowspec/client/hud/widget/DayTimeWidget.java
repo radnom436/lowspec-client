@@ -35,11 +35,10 @@ public class DayTimeWidget extends Widget {
         int hour = (timeOfDay / 1000 + 6) % 24;
         int minute = (int)((timeOfDay % 1000) * 0.06);
 
-        int W = mc.getWindow().getGuiScaledWidth();
         int x = 6;
         int y = 6;
 
         String text = String.format("DAY  %d  %02d:%02d", day, hour, minute);
-        g.drawString(font, text, x, y, color & 0xFFFFFF | 0xFF000000);
+        g.text(font, text, x, y, 0xFFFFFFFF, false);
     }
 }

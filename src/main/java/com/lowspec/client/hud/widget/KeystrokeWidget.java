@@ -6,7 +6,6 @@ import com.lowspec.client.hud.widget.Widget;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
-import net.minecraft.client.options.KeyBinding;
 
 public class KeystrokeWidget extends Widget {
     public enum Layout {
@@ -45,7 +44,7 @@ public class KeystrokeWidget extends Widget {
     public int getRenderHeight(Font font) {
         if (layout == Layout.HORIZONTAL) return 34;
         if (layout == Layout.ARROWS) return 34;
-        return 110; // WASD
+        return 110;
     }
 
     @Override
@@ -79,11 +78,11 @@ public class KeystrokeWidget extends Widget {
 
         int y = H - 40;
         String[] labels = {"W", "A", "S", "D"};
-        int[] x = {W / 2 - 35, W / 2 - 35, W / 2 - 35, W / 2 - 35};
+        int[] xs = {W / 2 - 17, W / 2 - 17, W / 2 - 17, W / 2 - 17};
 
         for (int i = 0; i < 4; i++) {
             int col = keys[i] ? 0xFFFFAA00 : 0xFFAAAAAA;
-            g.drawString(font, labels[i], x[i], y + i * 10, col);
+            g.text(font, labels[i], xs[i], y + i * 10, col, false);
         }
     }
 
@@ -100,12 +99,10 @@ public class KeystrokeWidget extends Widget {
         int row3 = H - 20;
         int KEY = 24;
 
-        // W
-        g.drawString(font, "W", W / 2 - 17, row2, up ? 0xFFFFAA00 : 0xFFAAAAAA);
-        // A S D
-        g.drawString(font, "A", W / 2 - 51, row3, left ? 0xFFFFAA00 : 0xFFAAAAAA);
-        g.drawString(font, "S", W / 2 - 17, row3, down ? 0xFFFFAA00 : 0xFFAAAAAA);
-        g.drawString(font, "D", W / 2 + 17, row3, right ? 0xFFFFAA00 : 0xFFAAAAAA);
+        g.text(font, "W", W / 2 - 17, row2, up ? 0xFFFFAA00 : 0xFFAAAAAA, false);
+        g.text(font, "A", W / 2 - 51, row3, left ? 0xFFFFAA00 : 0xFFAAAAAA, false);
+        g.text(font, "S", W / 2 - 17, row3, down ? 0xFFFFAA00 : 0xFFAAAAAA, false);
+        g.text(font, "D", W / 2 + 17, row3, right ? 0xFFFFAA00 : 0xFFAAAAAA, false);
     }
 
     private void renderHorizontal(GuiGraphicsExtractor g, Font font, Minecraft mc) {
@@ -120,28 +117,28 @@ public class KeystrokeWidget extends Widget {
         String sKey = mc.options.keyDown.isDown() ? "S" : "s";
         String dKey = mc.options.keyRight.isDown() ? "D" : "d";
 
-        g.drawString(font, aKey, x - 51, y, 0xFFFFFFFF);
-        g.drawString(font, wKey, x - 17, y, 0xFFFFFFFF);
-        g.drawString(font, sKey, x - 17, y + 16, 0xFFFFFFFF);
-        g.drawString(font, dKey, x + 17, y, 0xFFFFFFFF);
+        g.text(font, aKey, x - 51, y, 0xFFFFFFFF, false);
+        g.text(font, wKey, x - 17, y, 0xFFFFFFFF, false);
+        g.text(font, sKey, x - 17, y + 16, 0xFFFFFFFF, false);
+        g.text(font, dKey, x + 17, y, 0xFFFFFFFF, false);
 
         if (showMouse) {
             boolean lmb = mc.options.keyAttack.isDown();
             boolean rmb = mc.options.keyUse.isDown();
-            g.drawString(font, "LMB", x - 17, y + 32, lmb ? 0xFFFFAA00 : 0xFFAAAAAA);
-            g.drawString(font, "RMB", x + 17, y + 32, rmb ? 0xFFFFAA00 : 0xFFAAAAAA);
+            g.text(font, "LMB", x - 17, y + 32, lmb ? 0xFFFFAA00 : 0xFFAAAAAA, false);
+            g.text(font, "RMB", x + 17, y + 32, rmb ? 0xFFFFAA00 : 0xFFAAAAAA, false);
         }
 
         if (showSpace) {
             boolean space = mc.options.keyJump.isDown();
-            g.drawString(font, "SPACE", x - 25, y + 48, space ? 0xFFFFAA00 : 0xFFAAAAAA);
+            g.text(font, "SPACE", x - 25, y + 48, space ? 0xFFFFAA00 : 0xFFAAAAAA, false);
         }
 
         if (showSprintSneak) {
             boolean sprint = mc.options.keySprint.isDown();
             boolean sneak = mc.options.keySneak.isDown();
-            g.drawString(font, "SHIFT", x - 25, y + 64, sneak ? 0xFFAAAAAA : 0xFF666666);
-            g.drawString(font, "CTRL", x + 15, y + 64, sprint ? 0xFFFFAA00 : 0xFFAAAAAA);
+            g.text(font, "SHIFT", x - 25, y + 64, sneak ? 0xFFAAAAAA : 0xFF666666, false);
+            g.text(font, "CTRL", x + 15, y + 64, sprint ? 0xFFFFAA00 : 0xFFAAAAAA, false);
         }
     }
 

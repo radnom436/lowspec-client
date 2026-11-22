@@ -38,10 +38,10 @@ public class MemoryWidget extends Widget {
 
         String text = String.format("MEM  %d / %d MB", used >> 20, max >> 20);
 
-        int x = getAbsoluteX(g.getMatrixStack().getGraphics().getRenderLayerCount());
-        int y = getAbsoluteY(g.getMatrixStack().getGraphics().getFont(), font);
+        int x = getAbsoluteX(0);
+        int y = getAbsoluteY(0, font);
 
-        g.drawString(font, text, x, y, color & 0xFFFFFF | 0xFF000000);
+        g.text(font, text, x, y, 0xFFFFFFFF, false);
     }
 
     public long getUsedMemory() {

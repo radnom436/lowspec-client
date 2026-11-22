@@ -3,7 +3,6 @@ package com.lowspec.client.hud.widget;
 import com.lowspec.client.hud.widget.Anchor;
 import com.lowspec.client.hud.widget.Point;
 import com.lowspec.client.hud.widget.Widget;
-import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
@@ -45,7 +44,6 @@ public class ArmorWidget extends Widget {
 
     private Position position = Position.VERTICAL;
     private DisplayMode mode = DisplayMode.PERCENTAGE;
-    private int slotX = 0;
 
     public ArmorWidget() {
         super("armor");
@@ -55,7 +53,7 @@ public class ArmorWidget extends Widget {
 
     @Override
     public int getRenderWidth(Font font) {
-        return 72; // 4 slots * 16 + spacing
+        return 72;
     }
 
     @Override
@@ -96,12 +94,13 @@ public class ArmorWidget extends Widget {
         for (EquipmentSlot slot : slots) {
             ItemStack stack = mc.player.getItemBySlot(slot);
             if (!stack.isEmpty()) {
-                g.getItemRenderer().render(stack, ax, ay);
+                g.renderItem(stack, ax, ay);
                 if (stack.isDamageableItem()) {
                     int pct = getDurabilityPercent(stack);
                     String text = pct + "%";
                     int col = pctColor(pct);
-                    g.drawString(font, text, ax - 3 - font.width(text), ay + 4, col, true);
+                    int tw = font.width(text);
+                    g.text(font, text, ax - 3 - tw, ay + 4, col, true);
                 }
             }
             ay += 18;
@@ -121,11 +120,12 @@ public class ArmorWidget extends Widget {
             ItemStack stack = mc.player.getItemBySlot(slots[i]);
             int x = x0 + i * 28 + 6;
             if (!stack.isEmpty()) {
-                g.getItemRenderer().render(stack, x, y0);
+                g.renderItem(stack, x, y0);
                 if (stack.isDamageableItem()) {
                     int pct = getDurabilityPercent(stack);
                     String text = pct + "%";
-                    g.drawString(font, text, x + 8 - font.width(text) / 2, y0 + 17, pctColor(pct), true);
+                    int tw = font.width(text);
+                    g.text(font, text, x + 8 - tw / 2, y0 + 17, pctColor(pct), true);
                 }
             }
         }
@@ -145,11 +145,12 @@ public class ArmorWidget extends Widget {
             ItemStack stack = mc.player.getItemBySlot(slots[i]);
             int x = x0 + i * slotW + (slotW - 16) / 2;
             if (!stack.isEmpty()) {
-                g.getItemRenderer().render(stack, x, y0);
+                g.renderItem(stack, x, y0);
                 if (stack.isDamageableItem()) {
                     int pct = getDurabilityPercent(stack);
                     String text = pct + "%";
-                    g.drawString(font, text, x + 8 - font.width(text) / 2, y0 + 17, pctColor(pct), true);
+                    int tw = font.width(text);
+                    g.text(font, text, x + 8 - tw / 2, y0 + 17, pctColor(pct), true);
                 }
             }
         }
@@ -169,11 +170,12 @@ public class ArmorWidget extends Widget {
             ItemStack stack = mc.player.getItemBySlot(slots[i]);
             int x = x0 + i * slotW + (slotW - 16) / 2;
             if (!stack.isEmpty()) {
-                g.getItemRenderer().render(stack, x, y0);
+                g.renderItem(stack, x, y0);
                 if (stack.isDamageableItem()) {
                     int pct = getDurabilityPercent(stack);
                     String text = pct + "%";
-                    g.drawString(font, text, x + 8 - font.width(text) / 2, y0 + 17, pctColor(pct), true);
+                    int tw = font.width(text);
+                    g.text(font, text, x + 8 - tw / 2, y0 + 17, pctColor(pct), true);
                 }
             }
         }

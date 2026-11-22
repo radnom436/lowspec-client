@@ -6,7 +6,10 @@ import com.lowspec.client.hud.widget.Widget;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.multiplayer.MultiplayerLevel;
+import net.minecraft.core.RegistryAccess;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 
 public class CoordsWidget extends Widget {
     public CoordsWidget() {
@@ -30,16 +33,15 @@ public class CoordsWidget extends Widget {
         Player player = net.minecraft.client.Minecraft.getInstance().player;
         if (player == null) return;
 
-        int x = getAbsoluteX(g.getMatrixStack().getGraphics().getRenderLayerCount());
-        int y = getAbsoluteY(g.getMatrixStack().getGraphics().getFont(), font);
+        int x = getAbsoluteX(0);
+        int y = getAbsoluteY(0, font);
 
         double px = Math.floor(player.getX());
         double py = Math.floor(player.getY());
         double pz = Math.floor(player.getZ());
 
         String facing = getFacingString(player);
-        String world = player.level.dimension().location().getPath();
-        boolean isNether = player.level.dimension() == MultiplayerLevel.NETHER;
+        boolean isNether = player.level.dimension() == Level.NETHER;
 
         String text;
         if (isNether) {
@@ -53,7 +55,7 @@ public class CoordsWidget extends Widget {
         String[] lines = text.split("\n");
         int lineY = y;
         for (String line : lines) {
-            g.drawString(font, line, x, lineY, color & 0xFFFFFF | 0xFF000000);
+            g.text(font, line, x, lineY, 0xFFFFFFFF, false);
             lineY += 10;
         }
     }

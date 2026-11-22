@@ -6,9 +6,7 @@ import com.lowspec.client.hud.widget.Widget;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
-import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,16 +33,8 @@ public class EffectWidget extends Widget {
         Minecraft mc = Minecraft.getInstance();
         if (mc.player == null) return;
 
-        List<MobEffectInstance> effects = mc.player.getActiveEffects();
-        if (effects.isEmpty()) return;
-
-        int W = mc.getWindow().getGuiScaledWidth();
-        int x = W - 6 - getRenderWidth(font);
-        int y = 6;
-
-        for (MobEffectInstance instance : effects) {
-            MobEffect effect = instance.getEffect();
-            String name = effect.getDescriptionId().getString();
+        for (MobEffectInstance instance : mc.player.getActiveEffects()) {
+            String name = instance.getEffect().value().getDisplayName().getString();
             if (instance.getAmplifier() > 0) {
                 name += " " + (instance.getAmplifier() + 1);
             }
@@ -53,23 +43,33 @@ public class EffectWidget extends Widget {
             String timeStr = infinite ? "inf" : formatTime(instance.getDuration());
             String line = name + "  " + timeStr;
 
-            // Color based on remaining time
             int col;
             if (infinite || instance.getDuration() < 200) {
-                col = 0xFFFF6B6B; // Red for low time
+                col = 0xFFFF6B6B;
             } else {
-                col = 0xFFFFFFFF; // White
+                col = 0xFFFFFFFF;
             }
 
             int w = font.width(line) + 12;
-            int ex = W - w - x;
+            int W = mc.getWindow().getGuiScaledWidth();
+            int ex = W - w - 6;
+            int y = 6 + (getActiveEffectsBefore(instance) * 18);
 
             g.fill(ex, y, ex + w, y + 15, 0x70101820);
             g.fill(ex + 2, y + 2, ex + w - 2, y + 13, 0x55FFFFFF);
-            g.drawString(font, line, ex + 6, y + 4, col, false);
-
-            y += 18;
+            g.text(font, line, ex + 6, y + 4, col, false);
         }
+    }
+
+    private int getActiveEffectsBefore(MobEffectInstance target) {
+        Minecraft mc = Minecraft.getInstance();
+        if (mc.player == null) return 0;
+        int count = 0;
+        for (MobEffectInstance instance : mc.player.getActiveEffects()) {
+            if (instance == target) break;
+            count++;
+        }
+        return count;
     }
 
     private String formatTime(int ticks) {
@@ -84,7 +84,7 @@ public class EffectWidget extends Widget {
 
         List<String> names = new ArrayList<>();
         for (MobEffectInstance instance : mc.player.getActiveEffects()) {
-            String name = instance.getEffect().getDescriptionId().getString();
+            String name = instance.getEffect().value().getDisplayName().getString();
             if (instance.getAmplifier() > 0) {
                 name += " " + (instance.getAmplifier() + 1);
             }

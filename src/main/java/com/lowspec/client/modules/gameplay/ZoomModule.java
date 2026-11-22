@@ -6,13 +6,11 @@ import com.lowspec.client.core.ComplianceTag;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.options.KeyBinding;
 
 public class ZoomModule extends Module {
     private boolean zoomActive = false;
     private int zoomBase = 70;
     private float zoomCur = 70f;
-    private KeyBinding zoomKey;
 
     public ZoomModule() {
         super("zoom", "Zoom", "Smooth zoom with configurable FOV", Category.VISUAL, ComplianceTag.ALWAYS_SAFE, true);
@@ -20,13 +18,12 @@ public class ZoomModule extends Module {
 
     @Override
     public void onEnable() {
-        // Key binding will be set up by LowSpecClient
         ClientTickEvents.END_CLIENT_TICK.register(this::onTick);
     }
 
     private void onTick(Minecraft mc) {
-        // Zoom key should be passed from main class
-        boolean want = zoomKey != null && zoomKey.isDown();
+        // Zoom key is handled in LowSpecClient
+        boolean want = LowSpecClient.isEnabled("zoom") && LowSpecClient.isZoomKeyDown();
 
         if (want) {
             if (!zoomActive) {
@@ -45,10 +42,6 @@ public class ZoomModule extends Module {
                 mc.options.fov().set(Math.round(zoomCur));
             }
         }
-    }
-
-    public void setZoomKey(KeyBinding key) {
-        this.zoomKey = key;
     }
 
     public float getTargetFov() {

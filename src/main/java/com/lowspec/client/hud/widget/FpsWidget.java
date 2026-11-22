@@ -32,9 +32,9 @@ public class FpsWidget extends Widget {
     public void render(GuiGraphicsExtractor g, Font font, int mouseX, int mouseY, float delta) {
         String text = String.format("FPS  %d  Avg: %d  1%%: %d  FT: %.2fms",
                 currentFps, averageFps, lowFps, frameTime * 1000);
-        int x = getAbsoluteX(g.getMatrixStack().getGraphics().getRenderLayerCount());
-        int y = getAbsoluteY(g.getMatrixStack().getGraphics().getFont(), font);
-        g.drawString(font, text, x, y, color & 0xFFFFFF | 0xFF000000);
+        int x = getAbsoluteX(0);
+        int y = getAbsoluteY(0, font);
+        g.text(font, text, x, y, 0xFFFFFFFF, false);
     }
 
     public void update(int currentFps, int averageFps, int lowFps, float frameTime) {

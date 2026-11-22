@@ -32,11 +32,10 @@ public class ServerAddressWidget extends Widget {
         String address = mc.getCurrentServer().address;
         if (address == null) return;
 
-        int W = mc.getWindow().getGuiScaledWidth();
         int x = 6;
         int y = 6;
 
         String text = "SERVER  " + address;
-        g.drawString(font, text, x, y, color & 0xFFFFFF | 0xFF000000);
+        g.text(font, text, x, y, 0xFFFFFFFF, false);
     }
 }

@@ -4,7 +4,6 @@ import com.lowspec.client.core.Module;
 import com.lowspec.client.core.Category;
 import com.lowspec.client.core.ComplianceTag;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 
 public class FreelookModule extends Module {
@@ -29,9 +28,7 @@ public class FreelookModule extends Module {
     private void onTick(Minecraft mc) {
         if (mc.player == null) return;
 
-        // Key binding should be set up by LowSpecClient
-        // This is a placeholder - actual key binding would be passed from main class
-        boolean freelookKey = net.minecraft.client.KeyMapping.DEFAULT_KEYBOARD_BINDES.get("key.lowspec.freelook").isDown();
+        boolean freelookKey = LowSpecClient.isEnabled("freelook") && LowSpecClient.isFreelookKeyDown();
 
         if (freelookKey && !isActive) {
             isActive = true;

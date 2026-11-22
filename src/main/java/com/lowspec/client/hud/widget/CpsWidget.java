@@ -42,12 +42,12 @@ public class CpsWidget extends Widget {
         int rightCps = rightClicks.size();
         int total = leftCps + rightCps;
 
-        int x = getAbsoluteX(g.getMatrixStack().getGraphics().getRenderLayerCount());
-        int y = getAbsoluteY(g.getMatrixStack().getGraphics().getFont(), font);
+        int x = getAbsoluteX(0);
+        int y = getAbsoluteY(0, font);
 
         String text = String.format("CPS  L: %.1f  R: %.1f  Total: %.1f",
                 leftCps / 100.0f, rightCps / 100.0f, total / 100.0f);
-        g.drawString(font, text, x, y, color & 0xFFFFFF | 0xFF000000);
+        g.text(font, text, x, y, 0xFFFFFFFF, false);
     }
 
     public void recordLeftClick() {

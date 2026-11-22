@@ -32,7 +32,6 @@ public class CompassWidget extends Widget {
         float yaw = mc.player.getYRot();
         if (yaw < 0) yaw += 360;
 
-        float northDegrees = yaw;
         String dirs = "N";
         if (yaw >= 15 && yaw < 75) dirs = "NE";
         else if (yaw >= 75 && yaw < 105) dirs = "E";
@@ -44,7 +43,7 @@ public class CompassWidget extends Widget {
         int x = W - 6 - getRenderWidth(font);
         int y = 6;
 
-        String text = String.format("NORTH %s  %d°", dirs, (int)northDegrees);
-        g.drawString(font, text, x, y, color & 0xFFFFFF | 0xFF000000);
+        String text = String.format("NORTH %s  %d°", dirs, (int)yaw);
+        g.text(font, text, x, y, 0xFFFFFFFF, false);
     }
 }

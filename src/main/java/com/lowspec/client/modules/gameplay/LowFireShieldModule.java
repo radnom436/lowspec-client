@@ -9,7 +9,6 @@ import net.minecraft.client.Minecraft;
 public class LowFireShieldModule extends Module {
     private float fireOpacity = 1.0f;
     private float shieldOpacity = 1.0f;
-    private float targetOpacity = 0.3f;
 
     public LowFireShieldModule() {
         super("lowfire", "Low Fire/Shield", "Reduce fire and shield animation opacity", Category.VISUAL, ComplianceTag.SERVER_RESTRICTED, false);
@@ -22,7 +21,6 @@ public class LowFireShieldModule extends Module {
 
     private void onTick(Minecraft mc) {
         // Adjust through client settings
-        // This would modify render parameters
     }
 
     public float getFireOpacity() {

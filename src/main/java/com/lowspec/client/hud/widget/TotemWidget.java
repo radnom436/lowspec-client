@@ -20,7 +20,7 @@ public class TotemWidget extends Widget {
 
     @Override
     public int getRenderWidth(Font font) {
-        return 18; // One item slot width
+        return 18;
     }
 
     @Override
@@ -40,17 +40,13 @@ public class TotemWidget extends Widget {
         int y = 6;
 
         if (count > 0) {
-            // Render totem icon
-            g.getItemRenderer().renderGoldenFaceOverlay(null, null, mc.player.getCooldowns(), x, y);
             g.fill(x, y, x + 18, y + 18, 0x70101820);
-
             String text = String.valueOf(count);
-            int textWidth = font.width(text);
-            g.drawString(font, text, x + 9 - textWidth / 2, y + 1, 0xFFFFFFFF, true);
+            int tw = font.width(text);
+            g.text(font, text, x + 9 - tw / 2, y + 1, 0xFFFFFFFF, true);
         } else {
-            // Just show "0" or nothing when no totems
             String text = "0";
-            g.drawString(font, text, x, y, 0x555555);
+            g.text(font, text, x, y, 0x555555, false);
         }
     }
 
@@ -60,7 +56,6 @@ public class TotemWidget extends Widget {
 
         int count = 0;
 
-        // Check inventory
         NonNullList<ItemStack> inventory = mc.player.getInventory().getNonExposedStorage();
         for (ItemStack stack : inventory) {
             if (stack.is(Items.TOTEM_OF_UNDYING)) {
@@ -68,7 +63,6 @@ public class TotemWidget extends Widget {
             }
         }
 
-        // Check armor slots
         for (EquipmentSlot slot : EquipmentSlot.ARMOR) {
             ItemStack stack = mc.player.getItemBySlot(slot);
             if (stack.is(Items.TOTEM_OF_UNDYING)) {
@@ -76,7 +70,6 @@ public class TotemWidget extends Widget {
             }
         }
 
-        // Check offhand
         ItemStack offhand = mc.player.getItemBySlot(EquipmentSlot.OFFHAND);
         if (offhand.is(Items.TOTEM_OF_UNDYING)) {
             count += offhand.getCount();

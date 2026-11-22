@@ -31,13 +31,10 @@ public class PingWidget extends Widget {
     public void render(GuiGraphicsExtractor g, Font font, int mouseX, int mouseY, float delta) {
         Minecraft mc = Minecraft.getInstance();
         if (mc.player == null) return;
-
-        // Hide in singleplayer
         if (mc.getConnection() == null) return;
 
         long now = System.currentTimeMillis();
         if (now - lastUpdate > 5000) {
-            // Update ping
             updatePing(mc);
             lastUpdate = now;
         }
@@ -57,11 +54,10 @@ public class PingWidget extends Widget {
             else col = 0xFFFF5555;
         }
 
-        g.drawString(font, text, x, y, col);
+        g.text(font, text, x, y, col, false);
     }
 
     private void updatePing(Minecraft mc) {
-        // Simplified - would use actual network latency
         if (mc.getConnection() != null) {
             this.ping = (int)(mc.getConnection().getLatency() + Math.random() * 10);
         }

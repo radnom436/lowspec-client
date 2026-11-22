@@ -30,7 +30,6 @@ public class ReachWidget extends Widget {
         Minecraft mc = Minecraft.getInstance();
         if (mc.player == null) return;
 
-        // Calculate last hit reach
         float reach = calculateLastHitReach(mc);
 
         int W = mc.getWindow().getGuiScaledWidth();
@@ -38,12 +37,11 @@ public class ReachWidget extends Widget {
         int y = 6;
 
         String text = String.format("REACH  %.1f", reach);
-        g.drawString(font, text, x, y, color & 0xFFFFFF | 0xFF000000);
+        g.text(font, text, x, y, 0xFFFFFFFF, false);
     }
 
     private float calculateLastHitReach(Minecraft mc) {
-        // Simplified - actual implementation would track last hit entity
-        Player target = mc.targetedEntity;
+        Player target = mc.crosshairPickEntity;
         if (target == null) return 0f;
 
         double dist = mc.player.distanceTo(target);

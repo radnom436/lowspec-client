@@ -36,12 +36,11 @@ public class SpeedWidget extends Widget {
         int y = 6;
 
         String text = String.format("SPEED  %.1f", speed);
-        g.drawString(font, text, x, y, color & 0xFFFFFF | 0xFF000000);
+        g.text(font, text, x, y, 0xFFFFFFFF, false);
     }
 
     private double calculateSpeed(Minecraft mc) {
         if (mc.player == null) return 0;
-        // Speed in blocks per second
         return mc.player.getDeltaMovement().length() * 0.0625 * 20;
     }
 }

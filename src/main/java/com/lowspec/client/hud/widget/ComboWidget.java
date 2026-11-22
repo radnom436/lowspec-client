@@ -45,7 +45,7 @@ public class ComboWidget extends Widget {
         int y = 6;
 
         String text = String.format("COMBO  %d  Streak: %d", combo, streak);
-        g.drawString(font, text, x, y, color & 0xFFFFFF | 0xFF000000);
+        g.text(font, text, x, y, 0xFFFFFFFF, false);
     }
 
     public void recordHit() {
@@ -62,7 +62,6 @@ public class ComboWidget extends Widget {
     }
 
     private void cleanOldHits(long now) {
-        // Reset after 1 second without a hit
         long cutoff = now - 1_000_000_000L;
         while (!hits.isEmpty() && hits.peekFirst() < cutoff) {
             hits.pollFirst();

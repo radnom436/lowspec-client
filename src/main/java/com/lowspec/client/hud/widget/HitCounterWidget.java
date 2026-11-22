@@ -36,7 +36,7 @@ public class HitCounterWidget extends Widget {
         int y = 6;
 
         String text = String.format("HITS  %d", hitCount);
-        g.drawString(font, text, x, y, color & 0xFFFFFF | 0xFF000000);
+        g.text(font, text, x, y, 0xFFFFFFFF, false);
     }
 
     public void increment() {

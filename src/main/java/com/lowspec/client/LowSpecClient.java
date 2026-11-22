@@ -32,11 +32,11 @@ import java.util.Properties;
 public class LowSpecClient implements ClientModInitializer {
     private static KeyMapping menuKey;
     private static KeyMapping zoomKey;
+    private static KeyMapping freelookKey;
 
     private static final ModuleManager moduleManager = new ModuleManager();
     private static final ConfigManager configManager = new ConfigManager();
 
-    // zoom + sprint state
     private static boolean zoomActive;
     private static int zoomBase;
     private static float zoomCur;
@@ -49,33 +49,28 @@ public class LowSpecClient implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
-        // Load legacy config if present (migration)
         migrateLegacyConfig();
 
-        KeyMapping.Category category = KeyMappingHelper.registerKeyMapping(new KeyMapping(
-                "key.lowspec.menu", net.minecraft.client.KeyMapping.Type.KEYSYM, net.minecraft.client.KeyMapping.DEFAULT_KEYBOARD_BINDES.get("key.lowspec.menu").getKey(), category));
-
-        KeyMapping.Category menuCategory = KeyMapping.Category.register(
+        KeyMapping.Category category = KeyMapping.Category.register(
                 Identifier.fromNamespaceAndPath("lowspec", "main"));
 
         menuKey = KeyMappingHelper.registerKeyMapping(new KeyMapping(
-                "key.lowspec.menu", KeyMapping.Type.KEYSYM, KeyMapping.DEFAULT_KEYBOARD_BIND_RSHIFT, menuCategory));
+                "key.lowspec.menu", KeyMapping.Type.KEYSYM, KeyMapping.DEFAULT_KEYBOARD_BIND_RSHIFT, category));
         zoomKey = KeyMappingHelper.registerKeyMapping(new KeyMapping(
-                "key.lowspec.zoom", KeyMapping.Type.KEYSYM, KeyMapping.DEFAULT_KEYBOARD_BIND_C, menuCategory));
+                "key.lowspec.zoom", KeyMapping.Type.KEYSYM, KeyMapping.DEFAULT_KEYBOARD_BIND_C, category));
+        freelookKey = KeyMappingHelper.registerKeyMapping(new KeyMapping(
+                "key.lowspec.freelook", KeyMapping.Type.KEYSYM, KeyMapping.DEFAULT_KEYBOARD_BIND_LEFT_ALT, category));
 
         ClientTickEvents.END_CLIENT_TICK.register(this::onClientTick);
 
-        // Hide vanilla effect icons when our timer is on
         HudElementRegistry.replaceElement(VanillaHudElements.MOB_EFFECTS,
                 original -> isEnabled("effects") ? NO_HUD : original);
 
-        // Attach HUD before chat
         HudElementRegistry.attachElementBefore(
                 VanillaHudElements.CHAT,
                 Identifier.fromNamespaceAndPath("lowspec", "hud"),
-                (graphics, delta) -> renderHud(graphics, delta));
+                this::renderHud);
 
-        // Title screen watermark
         ScreenEvents.AFTER_INIT.register((client, screen, width, height) -> {
             if (screen instanceof TitleScreen) {
                 ScreenEvents.afterExtract(screen).register(this::titleWatermark);
@@ -108,8 +103,7 @@ public class LowSpecClient implements ClientModInitializer {
 
     private void tickZoom(Minecraft mc) {
         var fov = mc.options.fov();
-        boolean zoomEnabled = isEnabled("zoom");
-        boolean want = zoomEnabled && zoomKey.isDown() && !isRestricted("zoom");
+        boolean want = isZoomKeyDown();
         if (want) {
             if (!zoomActive) {
                 zoomActive = true;
@@ -134,47 +128,40 @@ public class LowSpecClient implements ClientModInitializer {
         int w = mc.getWindow().getGuiScaledWidth();
         int h = mc.getWindow().getGuiScaledHeight();
 
-        // Render active HUD widgets based on config
+        int y = 6;
+        int x = 6;
+
         if (isEnabled("fps")) {
-            // FPS widget
-            int y = 6;
             String fpsText = getFpsText();
-            g.drawString(mc.font, fpsText, 6, y, 0xFFFFFFFF);
+            g.text(mc.font, fpsText, x, y, 0xFFFFFFFF, false);
             y += 16;
         }
 
         if (isEnabled("cps")) {
-            // CPS widget
-            int y = 6;
             String cpsText = getCpsText();
-            g.drawString(mc.font, cpsText, 6, y, 0xFFFFFFFF);
+            g.text(mc.font, cpsText, x, y, 0xFFFFFFFF, false);
             y += 16;
         }
 
         if (isEnabled("coords") && mc.player != null) {
-            // Coords widget
-            int y = 6;
             String coordsText = String.format("XYZ  %d  %d  %d",
                     (int)Math.floor(mc.player.getX()),
                     (int)Math.floor(mc.player.getY()),
                     (int)Math.floor(mc.player.getZ()));
-            g.drawString(mc.font, coordsText, 6, y, 0xFFFFFFFF);
+            g.text(mc.font, coordsText, x, y, 0xFFFFFFFF, false);
+            y += 16;
         }
 
         if (isEnabled("memory")) {
-            // Memory widget
             Runtime rt = Runtime.getRuntime();
             int used = (int)((rt.totalMemory() - rt.freeMemory()) >> 20);
             int max = (int)(rt.maxMemory() >> 20);
             String memText = String.format("MEM  %d / %d MB", used, max);
-            g.drawString(mc.font, memText, 6, 22, 0xFFFFFFFF);
+            g.text(mc.font, memText, x, y, 0xFFFFFFFF, false);
         }
-
-        // Add more HUD renders as implemented
     }
 
     private String getFpsText() {
-        // FPS calculation
         return "FPS  --";
     }
 
@@ -182,7 +169,6 @@ public class LowSpecClient implements ClientModInitializer {
         return "CPS  --";
     }
 
-    // ---------- Module State ----------
     public static boolean isEnabled(String moduleId) {
         return configManager.get().defaultProfile.getModule(moduleId).enabled;
     }
@@ -216,7 +202,14 @@ public class LowSpecClient implements ClientModInitializer {
         return root;
     }
 
-    // ---------- Legacy Migration ----------
+    public static boolean isZoomKeyDown() {
+        return zoomKey != null && zoomKey.isDown();
+    }
+
+    public static boolean isFreelookKeyDown() {
+        return freelookKey != null && freelookKey.isDown();
+    }
+
     private void migrateLegacyConfig() {
         Path legacyFile = FabricLoader.getInstance().getConfigDir().resolve("lowspec.properties");
         if (!Files.exists(legacyFile)) return;
@@ -227,7 +220,6 @@ public class LowSpecClient implements ClientModInitializer {
                 p.load(in);
             }
 
-            // Migrate to JSON config
             String[] moduleIds = {"fps", "cps", "coords", "memory", "keys", "armor", "effects", "sprint", "zoom", "nametag", "font", "perf"};
             boolean[] defaults = {true, true, false, false, true, true, true, false, true, true, false, false};
 
@@ -241,19 +233,16 @@ public class LowSpecClient implements ClientModInitializer {
 
             configManager.save();
 
-            // Archive legacy file
             Path archive = legacyFile.resolveSibling(legacyFile.getFileName() + ".bak");
             Files.move(legacyFile, archive);
         } catch (Exception e) {
-            // Log but continue
         }
     }
 
-    // ---------- Watermarks ----------
     private void titleWatermark(Screen screen, GuiGraphicsExtractor g, int mouseX, int mouseY, float delta) {
         Minecraft mc = Minecraft.getInstance();
         Font font = mc.font;
-        int tw = font.getWidth("LowSpec Client");
+        int tw = font.width("LowSpec Client");
         int total = 24 + 6 + tw;
         int rx = screen.width / 2 - total / 2;
         int ry = 84;
@@ -264,7 +253,7 @@ public class LowSpecClient implements ClientModInitializer {
     private void cornerWatermark(Screen screen, GuiGraphicsExtractor g, int mouseX, int mouseY, float delta) {
         Minecraft mc = Minecraft.getInstance();
         Font font = mc.font;
-        int tw = font.getWidth("LowSpec Client");
+        int tw = font.width("LowSpec Client");
         int w = 12 + 5 + tw;
         int x = screen.width - w - 8;
         int y = screen.height - 12 - 6;
