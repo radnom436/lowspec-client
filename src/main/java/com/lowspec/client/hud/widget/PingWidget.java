@@ -59,7 +59,7 @@ public class PingWidget extends Widget {
 
     private void updatePing(Minecraft mc) {
         if (mc.getConnection() != null) {
-            this.ping = (int)(mc.getConnection().getPing() + Math.random() * 10);
+            this.ping = (int)(mc.getConnection().getLatency() + Math.random() * 10);
         }
     }
 }

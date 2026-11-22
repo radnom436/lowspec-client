@@ -3,13 +3,10 @@ package com.lowspec.client.hud.widget;
 import com.lowspec.client.hud.widget.Anchor;
 import com.lowspec.client.hud.widget.Point;
 import com.lowspec.client.hud.widget.Widget;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
-import net.minecraft.client.multiplayer.MultiplayerLevel;
-import net.minecraft.core.RegistryAccess;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.Level;
 
 public class CoordsWidget extends Widget {
     public CoordsWidget() {
@@ -30,7 +27,8 @@ public class CoordsWidget extends Widget {
 
     @Override
     public void render(GuiGraphicsExtractor g, Font font, int mouseX, int mouseY, float delta) {
-        Player player = net.minecraft.client.Minecraft.getInstance().player;
+        Minecraft mc = Minecraft.getInstance();
+        Player player = mc.player;
         if (player == null) return;
 
         int x = getAbsoluteX(0);
@@ -41,23 +39,10 @@ public class CoordsWidget extends Widget {
         double pz = Math.floor(player.getZ());
 
         String facing = getFacingString(player);
-        boolean isNether = player.level.dimension() == Level.NETHER;
 
-        String text;
-        if (isNether) {
-            double netherX = (int)(px / 0.25) / 0.25;
-            double netherZ = (int)(pz / 0.25) / 0.25;
-            text = String.format("XYZ  %d  %d  %d\n%s  Nether: %.0f,%.0f", (int)px, (int)py, (int)pz, facing, netherX, netherZ);
-        } else {
-            text = String.format("XYZ  %d  %d  %d  %s", (int)px, (int)py, (int)pz, facing);
-        }
+        String text = String.format("XYZ  %d  %d  %d  %s", (int)px, (int)py, (int)pz, facing);
 
-        String[] lines = text.split("\n");
-        int lineY = y;
-        for (String line : lines) {
-            g.text(font, line, x, lineY, 0xFFFFFFFF, false);
-            lineY += 10;
-        }
+        g.text(font, text, x, y, 0xFFFFFFFF, false);
     }
 
     private String getFacingString(Player player) {

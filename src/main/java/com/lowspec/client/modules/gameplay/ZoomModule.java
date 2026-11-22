@@ -4,7 +4,6 @@ import com.lowspec.client.core.Module;
 import com.lowspec.client.core.Category;
 import com.lowspec.client.core.ComplianceTag;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 
 public class ZoomModule extends Module {
@@ -22,29 +21,6 @@ public class ZoomModule extends Module {
     }
 
     private void onTick(Minecraft mc) {
-        // Zoom key is handled in LowSpecClient
-        boolean want = LowSpecClient.isEnabled("zoom") && LowSpecClient.isZoomKeyDown();
-
-        if (want) {
-            if (!zoomActive) {
-                zoomActive = true;
-                zoomBase = mc.options.fov().get();
-                zoomCur = zoomBase;
-            }
-            zoomCur += (30f - zoomCur) * 0.4f;
-            mc.options.fov().set(Math.round(zoomCur));
-        } else if (zoomActive) {
-            zoomCur += (zoomBase - zoomCur) * 0.4f;
-            if (Math.abs(zoomBase - zoomCur) < 0.8f) {
-                mc.options.fov().set(zoomBase);
-                zoomActive = false;
-            } else {
-                mc.options.fov().set(Math.round(zoomCur));
-            }
-        }
-    }
-
-    public float getTargetFov() {
-        return 30f;
+        // Zoom handled in LowSpecClient
     }
 }

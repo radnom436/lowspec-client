@@ -36,7 +36,6 @@ public class PerformanceCenterScreen extends Screen {
         super(Component.literal("Performance Center"));
     }
 
-    @Override
     protected void init() {
         int pw = 300;
         int ph = 200;
@@ -102,7 +101,6 @@ public class PerformanceCenterScreen extends Screen {
         mc.options.save();
     }
 
-    @Override
     public void render(GuiGraphicsExtractor g, int mouseX, int mouseY, float delta) {
         Minecraft mc = Minecraft.getInstance();
         Font f = mc.font;

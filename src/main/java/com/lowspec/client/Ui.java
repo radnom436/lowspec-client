@@ -2,6 +2,7 @@ package com.lowspec.client;
 
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import java.util.HashMap;
 import java.util.Map;
@@ -11,15 +12,15 @@ public class Ui {
             new net.minecraft.network.chat.FontDescription.Resource(
                     net.minecraft.resources.Identifier.fromNamespaceAndPath("lowspec", "glass")));
 
-    private static final Map<String, net.minecraft.network.chat.Component> PLAIN = new HashMap<>();
-    private static final Map<String, net.minecraft.network.chat.Component> STYLED = new HashMap<>();
+    private static final Map<String, Component> PLAIN = new HashMap<>();
+    private static final Map<String, Component> STYLED = new HashMap<>();
 
-    public static net.minecraft.network.chat.Component t(String s) {
+    public static Component t(String s) {
         boolean styled = LowSpecClient.getConfigManager().get().defaultProfile.getModule("font").enabled;
-        Map<String, net.minecraft.network.chat.Component> map = styled ? STYLED : PLAIN;
+        Map<String, Component> map = styled ? STYLED : PLAIN;
         if (map.size() > 512) map.clear();
         return map.computeIfAbsent(s,
-                k -> styled ? net.minecraft.network.chat.Component.literal(k).withStyle(STYLE) : net.minecraft.network.chat.Component.literal(k));
+                k -> styled ? Component.literal(k).withStyle(STYLE) : Component.literal(k));
     }
 
     public static int tw(Font f, String s) {
@@ -27,7 +28,7 @@ public class Ui {
     }
 
     public static void text(GuiGraphicsExtractor g, Font f, String s, int x, int y, int color, boolean shadow) {
-        g.text(f, t(s), x, y, color, shadow);
+        g.text(f, Component.literal(s), x, y, color, shadow);
     }
 
     public static int a(int c, float m) {

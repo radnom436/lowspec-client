@@ -44,12 +44,10 @@ public class HudEditorScreen extends Screen {
         super(Component.literal("HUD Editor"));
     }
 
-    @Override
     protected void init() {
         openNs = System.nanoTime();
     }
 
-    @Override
     public void render(GuiGraphicsExtractor g, int mx, int my, float delta) {
         Minecraft mc = Minecraft.getInstance();
         Font f = mc.font;
@@ -113,7 +111,7 @@ public class HudEditorScreen extends Screen {
         }
 
         String label = widget.getId();
-        g.text(f, label, x + 2, y - 10, 0xFFFFFFFF, false);
+        g.text(f, Component.literal(label), x + 2, y - 10, 0xFFFFFFFF, false);
 
         widget.render(g, f, mx - x, my - y, delta);
     }
@@ -133,15 +131,14 @@ public class HudEditorScreen extends Screen {
             int by = barY + 10;
             boolean active = m == mode;
             Ui.rr(g, bx, by, 80, 20, active ? 0x8055FFAA : 0x50FFFFFF);
-            g.text(f, m.label, bx + 20, by + 5, 0xFFFFFFFF, false);
+            g.text(f, Component.literal(m.label), bx + 20, by + 5, 0xFFFFFFFF, false);
         }
 
         int closeX = barX + barW - 80;
         Ui.rr(g, closeX, barY + 10, 70, 20, 0x80FF6666);
-        g.text(f, "Close", closeX + 15, barY + 15, 0xFFFFFFFF, false);
+        g.text(f, Component.literal("Close"), closeX + 15, barY + 15, 0xFFFFFFFF, false);
     }
 
-    @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         int mx = (int)mouseX;
         int my = (int)mouseY;
@@ -190,7 +187,6 @@ public class HudEditorScreen extends Screen {
         return super.mouseClicked(mouseX, mouseY, button);
     }
 
-    @Override
     public boolean mouseDragged(double mouseX, double mouseY, int button, double dragX, double dragY) {
         if (dragging && selectedWidget != null) {
             int mx = (int)mouseX;
@@ -208,7 +204,6 @@ public class HudEditorScreen extends Screen {
         return super.mouseDragged(mouseX, mouseY, button, dragX, dragY);
     }
 
-    @Override
     public boolean mouseReleased(double mouseX, double mouseY, int button) {
         dragging = false;
         if (selectedWidget != null) {
@@ -220,5 +215,17 @@ public class HudEditorScreen extends Screen {
             config.save();
         }
         return super.mouseReleased(mouseX, mouseY, button);
+    }
+
+    private enum EditorMode {
+        DRAG("Drag"),
+        RESIZE("Resize"),
+        SETTINGS("Settings");
+
+        private final String label;
+
+        EditorMode(String label) {
+            this.label = label;
+        }
     }
 }
