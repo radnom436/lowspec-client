@@ -1,5 +1,151 @@
 {
   "key.category.lowspec.main": "LowSpec Client",
   "key.lowspec.menu": "Open LowSpec menu",
-  "key.lowspec.zoom": "Zoom"
+  "key.lowspec.zoom": "Zoom",
+  "key.lowspec.freelook": "Freelook",
+  "key.lowspec.combo": "Toggle Combo Display",
+
+  "mod.lowspec.title": "LowSpec Client",
+  "mod.lowspec.desc": "Lightweight all-in-one client for Minecraft",
+  "mod.lowspec.author": "You",
+
+  "menu.lowspec.hud": "HUD",
+  "menu.lowspec.gameplay": "Gameplay",
+  "menu.lowspec.visual": "Visual",
+  "menu.lowspec.performance": "Performance",
+  "menu.lowspec.server_safety": "Server Safety",
+  "menu.lowspec.profiles": "Profiles",
+  "menu.lowspec.about": "About",
+
+  "search.lowspec": "Search",
+  "search.lowspec.nothing": "No results",
+
+  "profile.lowspec.default": "Default",
+  "profile.lowspec.pvp": "PvP",
+  "profile.lowspec.survival": "Survival",
+  "profile.lowspec.streaming": "Streaming",
+  "profile.lowspec.import": "Import Profile",
+  "profile.lowspec.export": "Export Profile",
+  "profile.lowspec.share": "Share Code",
+
+  "theme.lowspec.vanilla": "Vanilla",
+  "theme.lowspec.minimal": "Minimal",
+  "theme.lowspec.dark": "Dark",
+  "theme.lowspec.custom": "Custom",
+
+  "widget.fps.title": "FPS Counter",
+  "widget.fps.hint": "Show current, average, and 1% low FPS",
+
+  "widget.cps.title": "CPS Counter",
+  "widget.cps.hint": "Clicks per second tracking",
+
+  "widget.coords.title": "Coordinates",
+  "widget.coords.hint": "XYZ position with Nether conversion",
+
+  "widget.armor.title": "Armor HUD",
+  "widget.armor.hint": "Durability percentage display",
+
+  "widget.keystrokes.title": "Keystrokes",
+  "widget.keystrokes.hint": "W, A, S, D, mouse buttons display",
+
+  "widget.memory.title": "Memory Usage",
+  "widget.memory.hint": "RAM and GPU memory display",
+
+  "widget.effect.title": "Effect Timer",
+  "widget.effect.hint": "Potion duration countdown",
+
+  "widget.ping.title": "Ping",
+  "widget.ping.hint": "Server latency (hides in singleplayer)",
+
+  "widget.combo.title": "Combo Counter",
+  "widget.combo.hint": "Hit streak counter",
+
+  "widget.reach.title": "Reach",
+  "widget.reach.hint": "Last hit distance",
+
+  "widget.speed.title": "Speed",
+  "widget.speed.hint": "Current movement speed",
+
+  "widget.totem.title": "Totem Counter",
+  "widget.totem.hint": "Totem of Undying count",
+
+  "module.zoom.title": "Zoom",
+  "module.zoom.hint": "Smooth zoom with configurable FOV",
+  "module.zoom.fov": "Target FOV",
+  "module.zoom.smooth": "Smooth interpolation",
+
+  "module.sprint.title": "Toggle Sprint",
+  "module.sprint.hint": "Toggle sprint on/off with auto-sprint disabled",
+
+  "module.freelook.title": "Freelook",
+  "module.freelook.hint": "Separate camera rotation (server-gated)",
+
+  "module.lowfire.title": "Low Fire",
+  "module.lowfire.hint": "Reduce fire animation opacity",
+
+  "module.lowshield.title": "Low Shield",
+  "module.lowshield.hint": "Reduce shield block opacity",
+
+  "module.fullbright.title": "Fullbright",
+  "module.fullbright.hint": "Toggle maximum brightness (profile-gated)",
+
+  "module.crosshair.title": "Custom Crosshair",
+  "module.crosshair.hint": "Customizable crosshair with presets",
+
+  "performance.center": "Performance Center",
+  "performance.preset.low": "Low (6 RD, 5 SD)",
+  "performance.preset.balanced": "Balanced (10 RD, 8 SD)",
+  "performance.preset.quality": "Quality (12 RD, 12 SD)",
+  "performance.hw_cpu": "CPU",
+  "performance.hw_gpu": "GPU",
+  "performance.hw_ram": "RAM",
+  "performance.benchmark": "Run Benchmark",
+  "performance.apply": "Apply Preset",
+  "performance.restore": "Restore Previous",
+
+  "compliance.profile.strict": "Strict (Always Safe Only)",
+  "compliance.profile.standard": "Standard (Default)",
+  "compliance.profile.open": "Open (All Except Never Ship)",
+
+  "server.safety.hint": "This server may restrict some features",
+  "server.safety.allowed": "All features allowed",
+  "server.safety.banned": "Banned features: {0}",
+
+  "hud.editor.title": "HUD Editor",
+  "hud.editor.grid": "Grid Snap",
+  "hud.editor.scale": "Scale",
+  "hud.editor.color": "Color",
+  "hud.editor.opacity": "Opacity",
+  "hud.editor.visibility": "Visibility",
+  "hud.editor.reset": "Reset to Default",
+  "hud.editor.undo": "Undo",
+  "hud.editor.redo": "Redo",
+  "hud.editor.drag": "Drag to move",
+  "hud.editor.resize": "Resize handles",
+
+  "wizard.title": "First Run Wizard",
+  "wizard.hardware": "Hardware Tier",
+  "wizard.hw_low": "Low-end (Integrated GPU)",
+  "wizard.hw_mid": "Mid-range",
+  "wizard.hw_high": "High-end",
+  "wizard.playstyle": "Playstyle",
+  "wizard.play_pvp": "PvP Focus",
+  "wizard.play_survival": "Survival",
+  "wizard.play_builder": "Building",
+  "wizard.apply": "Apply Settings",
+  "wizard.skip": "Skip Wizard",
+
+  "about.version": "Version",
+  "about.built": "Built with",
+  "about.made_with": "Made with Claude Code",
+  "about.github": "GitHub",
+  "about.sources": "Source Code",
+
+  "general.ok": "OK",
+  "general.cancel": "Cancel",
+  "general.close": "Close",
+  "general.yes": "Yes",
+  "general.no": "No",
+  "general.enable": "Enable",
+  "general.disable": "Disable"
 }
